@@ -167,7 +167,7 @@ public.PREFIXED_OCAMLPACKS =\
 # \var{OCAMLPPFLAGS} Flags to pass to \verb+CAMLP4+.
 # \var{OCAMLCFLAGS} Flags to pass to the byte-code compiler (default \verb+-g+).
 # \var{OCAMLOPTFLAGS} Flags to pass to the native-code compiler (default empty).
-# \var{OCAMLFLAGS} Flags to pass to either compiler (default \verb+-warn-error A+).
+# \var{OCAMLFLAGS} Flags to pass to either compiler (default \verb+-warn-error -a+).
 # \varlabel{OCAML_BYTE_LINK_FLAGS}{OCAML\_BYTE\_LINK\_FLAGS} Flags to pass to the byte-code linker (default empty).
 # \varlabel{OCAML_NATIVE_LINK_FLAGS}{OCAML\_NATIVE\_LINK\_FLAGS} Flags to pass to the native-code linker (default empty).
 # \varlabel{OCAML_LINK_FLAGS}{OCAML\_LINK\_FLAGS} Flags to pass to either linker.
@@ -176,7 +176,11 @@ public.PREFIXED_OCAMLPACKS =\
 #
 declare OCAMLDEPFLAGS
 public.OCAMLPPFLAGS  =
-public.OCAMLFLAGS    = -warn-error A
+# Note: it is not recommended to use -warn-error option in production
+# code, because it will almost certainly prevent compiling your
+# program with later versions of OCaml when they add new warnings or
+# modify existing warnings. Source: ocamlc manpage
+public.OCAMLFLAGS    = -warn-error -a
 public.OCAMLCFLAGS   = -g
 public.OCAMLOPTFLAGS =
 public.OCAMLCPPFLAGS =
@@ -409,7 +413,7 @@ public.OCamlScannerPostproc() =
         filename = $1
         modules[] = $(split $' ', $2)
         export
-    case $'^	\(.*\)'
+    case $'^    \(.*\)'
         # Add the dependency
         modules[] += $1
         export
